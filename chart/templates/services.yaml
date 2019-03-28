@@ -1,0 +1,34 @@
+{{- range $portMapIndex, $portMapUnused := $.Values.service.ports }}
+{{- if eq $portMapIndex 0 }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{- if $.Values.service.name }}
+  name: {{ $.Values.service.name | quote }}
+  {{- else }}
+  name: {{ $.Release.Name | quote }}
+  {{- end }}
+  labels:
+    "app.kubernetes.io/name": {{ $.Release.Name | quote }}
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+  annotations:
+    "helm.sh/chart": "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+spec:
+  ports:
+    {{- range $portMapIndex, $portMap := $.Values.service.ports }}
+    - name: "port-{{ $portMapIndex }}"
+      port: {{ $portMap.port }}
+      {{- if $portMap.containerPort }}
+      targetPort: {{ $portMap.containerPort }}
+      {{- else }}
+      targetPort: {{ $portMap.port }}
+      {{- end }}
+      protocol: {{ $portMap.protocol | default "TCP" | quote }}
+    {{- end }}
+  selector:
+    "app.kubernetes.io/name": "devspace-app"
+    "app.kubernetes.io/component": {{ $.Release.Name | quote }}
+  type: {{ $.Values.service.type | default "ClusterIP" | quote }}
+---
+{{- end }}
+{{- end }}

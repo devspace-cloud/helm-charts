@@ -1,0 +1,3 @@
+name: my-app
+version: v0.0.1
+description: A helm chart for a cloud-native application created based on DevSpace Base Chart (https://github.com/devspace-cloud/helm-chart)

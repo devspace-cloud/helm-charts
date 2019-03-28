@@ -1,0 +1,4 @@
+# This file is used for the devspace cli, so it can identify the chart as the devspace chart
+# if you use helm to deploy the chart, it will do nothing
+# the chart can then be updated via `devspace update chart`
+version: 0.0.1

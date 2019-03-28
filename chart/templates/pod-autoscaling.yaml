@@ -1,0 +1,33 @@
+{{- if $.Values.autoScaling}}
+{{- if $.Values.autoScaling.horizontal }}
+{{- if gt $.Values.autoScaling.horizontal.maxReplicas $.Values.replicas }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $.Release.Name | quote }}
+  labels:
+    "app.kubernetes.io/name": "devspace-app"
+    "app.kubernetes.io/component": {{ $.Release.Name | quote }}
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+  annotations:
+    "helm.sh/chart": "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $.Release.Name.name | quote }}
+  minReplicas: {{ $.Values.replicas }}
+  maxReplicas: {{ $.Values.autoScaling.horizontal.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ $.Values.autoScaling.horizontal.averageCPU }}
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageValue: {{ $.Values.autoScaling.horizontal.averageMemory | quote }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

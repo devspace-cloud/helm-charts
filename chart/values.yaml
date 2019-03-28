@@ -1,0 +1,32 @@
+#### DevSpace Helm Chart ####
+# This is a highly configurable Helm chart. For information on how to configure this file,
+# take a look at the documentation: http://devspace.cloud/docs/chart/basics/devspace-helm-chart
+
+# A list of containers that should run the pods of this component
+containers:
+- image: dscr.io/username/image 
+  resources:
+    limits:
+      cpu: "400m"
+      memory: "500Mi"
+      ephemeralStorage: "1Gi"
+  # Environment variables
+  env: []
+  # Mount persistent volumes in this container
+  volumeMounts: []
+  # Expose your component via service
+  # URLs will be connected if name=external and externalPort=80
+service:
+  name: external
+  type: ClusterIP
+  ports:
+  - port: 3000 # This is a container port that should be exposed through this service
+
+# Define persistent volumes here
+# Then mount them in containers above
+volumes: []
+
+# Defines image pull secrets
+# DevSpace CLI will append all pull secrets which are automatically created
+# More infos on: https://devspace.cloud/docs/cli/images/pull-secrets
+pullSecrets: []
