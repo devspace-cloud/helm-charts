@@ -108,20 +108,52 @@ spec:
           resources:
             {{- with $container.resources.limits }}
             limits:
-              cpu: {{ .cpu | default "0" | quote }}
-              memory: {{ .memory | default "0" | quote }}
-              ephemeral-storage: {{ .ephemeralStorage | default "0" | quote }}
+              {{- if .cpu }}
+              cpu: {{ .cpu | quote }}
+              {{- end }}
+              {{- if .memory }}
+              memory: {{ .memory | quote }}
+              {{- end }}
+              {{- if .ephemeralStorage }}
+              ephemeral-storage: {{ .ephemeralStorage | quote }}
+              {{- end }}
             {{- end }}
             {{- if $container.resources.requests }}
+            {{- with $container.resources.requests }}
             requests:
-              cpu: {{ $container.resources.requests.cpu | default "0" | quote }}
-              memory: {{ $container.resources.requests.memory | default "0" | quote }}
-              ephemeral-storage: {{ $container.resources.requests.ephemeralStorage | default "0" | quote }}
+              {{- if .cpu }}
+              cpu: {{ .cpu | quote }}
+              {{- else }}
+              {{- if $container.resources.limits.cpu }}
+              cpu: "0"
+              {{- end }}
+              {{- end }}
+              {{- if .memory }}
+              memory: {{ .memory | quote }}
+              {{- else }}
+              {{- if $container.resources.limits.memory }}
+              memory: "0"
+              {{- end }}
+              {{- end }}
+              {{- if .ephemeralStorage }}
+              ephemeral-storage: {{ .ephemeralStorage | quote }}
+              {{- else }}
+              {{- if $container.resources.limits.ephemeralStorage }}
+              ephemeral-storage: "0"
+              {{- end }}
+              {{- end }}
+            {{- end }}
             {{- else }}
             requests:
+              {{- if $container.resources.requests.cpu }}
               cpu: "0"
+              {{- end }}
+              {{- if $container.resources.requests.memory }}
               memory: "0"
+              {{- end }}
+              {{- if $container.resources.requests.ephemeralStorage }}
               ephemeral-storage: "0"
+              {{- end }}
             {{- end }}
           {{- end }}
         {{- end }}
