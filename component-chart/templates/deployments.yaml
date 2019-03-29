@@ -124,26 +124,33 @@ spec:
               {{- if .cpu }}
               cpu: {{ .cpu | quote }}
               {{- else }}
+              {{- if $container.resources.limits }}
               {{- if $container.resources.limits.cpu }}
               cpu: "0"
+              {{- end }}
               {{- end }}
               {{- end }}
               {{- if .memory }}
               memory: {{ .memory | quote }}
               {{- else }}
+              {{- if $container.resources.limits }}
               {{- if $container.resources.limits.memory }}
               memory: "0"
+              {{- end }}
               {{- end }}
               {{- end }}
               {{- if .ephemeralStorage }}
               ephemeral-storage: {{ .ephemeralStorage | quote }}
               {{- else }}
+              {{- if $container.resources.limits }}
               {{- if $container.resources.limits.ephemeralStorage }}
               ephemeral-storage: "0"
               {{- end }}
               {{- end }}
+              {{- end }}
             {{- end }}
             {{- else }}
+            {{- if $container.resources.requests }}
             requests:
               {{- if $container.resources.requests.cpu }}
               cpu: "0"
@@ -154,6 +161,7 @@ spec:
               {{- if $container.resources.requests.ephemeralStorage }}
               ephemeral-storage: "0"
               {{- end }}
+            {{- end }}
             {{- end }}
           {{- end }}
         {{- end }}
