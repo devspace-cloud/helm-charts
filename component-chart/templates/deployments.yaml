@@ -150,15 +150,15 @@ spec:
               {{- end }}
             {{- end }}
             {{- else }}
-            {{- if $container.resources.requests }}
+            {{- if $container.resources.limits }}
             requests:
-              {{- if $container.resources.requests.cpu }}
+              {{- if $container.resources.limits.cpu }}
               cpu: "0"
               {{- end }}
-              {{- if $container.resources.requests.memory }}
+              {{- if $container.resources.limits.memory }}
               memory: "0"
               {{- end }}
-              {{- if $container.resources.requests.ephemeralStorage }}
+              {{- if $container.resources.limits.ephemeralStorage }}
               ephemeral-storage: "0"
               {{- end }}
             {{- end }}
