@@ -1,3 +1,5 @@
+{{- range $containerIndex, $containerUnused := $.Values.containers }}
+{{- if eq $containerIndex 0 }}
 apiVersion: apps/v1
 {{- $kind := "Deployment" }}
 {{- range $containerIndex, $container := $.Values.containers }}
@@ -248,4 +250,6 @@ spec:
     "app.kubernetes.io/component": {{ $.Release.Name | quote }}
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
 ---
+{{- end }}
+{{- end }}
 {{- end }}
