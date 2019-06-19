@@ -8,6 +8,7 @@ containers: []
 service:
   type: ClusterIP
   ports: []
+  externalIPs: []
 
 # Define persistent volumes here
 # Then mount them in containers above

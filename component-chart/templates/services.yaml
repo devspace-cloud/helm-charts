@@ -14,6 +14,10 @@ metadata:
   annotations:
     "helm.sh/chart": "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
 spec:
+  externalIPs:
+    {{- range $externalIPIndex, $externalIP := $.Values.service.externalIPs }}
+    - {{ $externalIP }}
+    {{- end }}
   ports:
     {{- range $portMapIndex, $portMap := $.Values.service.ports }}
     - name: "port-{{ $portMapIndex }}"
