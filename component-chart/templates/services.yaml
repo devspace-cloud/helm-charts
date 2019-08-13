@@ -34,5 +34,41 @@ spec:
     "app.kubernetes.io/component": {{ $.Release.Name | quote }}
   type: {{ $.Values.service.type | default "ClusterIP" | quote }}
 ---
+
+{{- range $portMapIndex, $portMap := $.Values.service.ports }}
+{{- if $portMap.ingress }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  {{- if $portMap.ingress.name }}
+  name: {{ $portMap.ingress.name | quote }}
+  {{- else }}
+  {{- if $.Values.service.name }}
+  name: "{{ $.Values.service.name }}-{{ $portMap.port }}"
+  {{- else }}
+  name: "{{ $.Release.Name }}-{{ $portMap.port }}"
+  {{- end }}
+  {{- end }}
+spec:
+  rules:
+  - host: {{ $portMap.ingress.host | quote }}
+    http:
+      paths:
+      - backend:
+          {{- if $.Values.service.name }}
+          serviceName: {{ $.Values.service.name | quote }}
+          {{- else }}
+          serviceName: {{ $.Release.Name | quote }}
+          {{- end }}
+          servicePort: {{ $portMap.port }}
+        {{- if $portMap.ingress.path }}
+        path: {{ $portMap.ingress.path | quote }}
+        {{- else }}
+        path: /
+        {{- end }}
+---
+{{- end }}
+{{- end }}
+
 {{- end }}
 {{- end }}
