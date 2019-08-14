@@ -47,12 +47,12 @@ spec:
   {{- end }}
   tls:
   {{- range $ingressRuleIndex, $ingressRule := $.Values.ingress.rules }}
-  {{- if or (and $ingressRule.tls (not (eq $ingressRule.tls (printf "%t" false)))) (and $.Values.ingress.tls (not (eq $.Values.ingress.tls (printf "%t" false)))) }}
+  {{- if or (and $ingressRule.tls (not (eq (printf "%t" $ingressRule.tls) (printf "%t" false)))) (and $.Values.ingress.tls (not (eq (printf "%t" $.Values.ingress.tls) (printf "%t" false)))) }}
   - hosts:
     {{- if and (not $ingressRule.tls) $.Values.ingress.tls }}
-    {{- if not (eq $.Values.ingress.tls (printf "%t" false)) }}
+    {{- if not (eq (printf "%t" $.Values.ingress.tls) (printf "%t" false)) }}
     - {{ $ingressRule.host }}
-    {{- if eq $.Values.ingress.tls (printf "%t" true) }}
+    {{- if eq (printf "%t" $.Values.ingress.tls) (printf "%t" true) }}
     {{- if $.Values.ingress.name }}
     secretName: {{ $.Values.ingress.name | quote }}
     {{- else }}
@@ -68,9 +68,9 @@ spec:
     {{- end }}
     {{- else }}
     {{- if $ingressRule.tls }}
-    {{- if not (eq $ingressRule.tls (printf "%t" false)) }}
+    {{- if not (eq (printf "%t" $ingressRule.tls) (printf "%t" false)) }}
     - {{ $ingressRule.host }}
-    {{- if eq $ingressRule.tls (printf "%t" true) }}
+    {{- if eq (printf "%t" $ingressRule.tls) (printf "%t" true) }}
     {{- if $.Values.ingress.name }}
     secretName: {{ $.Values.ingress.name | quote }}
     {{- else }}
@@ -81,7 +81,7 @@ spec:
     {{- end }}
     {{- end }}
     {{- else }}
-    secretName: "{{ $ingressRule.tls }}-{{ printf "%t" false }}"
+    secretName: "{{ $ingressRule.tls }}-{{ printf "%t" $ingressRule.tls }}-{{ printf "%t" false }}"
     {{- end }}
     {{- end }}
     {{- end }}
