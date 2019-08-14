@@ -81,7 +81,7 @@ spec:
     {{- end }}
     {{- end }}
     {{- else }}
-    secretName: {{ $ingressRule.tls | quote }}
+    secretName: "{{ $ingressRule.tls }}-{{ printf "%t" false }}"
     {{- end }}
     {{- end }}
     {{- end }}
