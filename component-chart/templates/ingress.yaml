@@ -47,7 +47,7 @@ spec:
   {{- end }}
   tls:
   {{- range $ingressRuleIndex, $ingressRule := $.Values.ingress.rules }}
-  {{- if or (and $ingressRule.tls (and (eq (typeOf $ingressRule.tls "string")) (not (eq $ingressRule.tls "false")))) (and $.Values.ingress.tls (and (eq (typeOf $.Values.ingress.tls "string")) (not (eq $.Values.ingress.tls "false")))) }}
+  {{- if or (and $ingressRule.tls (and (eq (typeOf $ingressRule.tls) "string") (not (eq $ingressRule.tls "false")))) (and $.Values.ingress.tls (and (eq (typeOf $.Values.ingress.tls) "string") (not (eq $.Values.ingress.tls "false")))) }}
   - hosts:
     {{- if and (not $ingressRule.tls) $.Values.ingress.tls }}
     - {{ $ingressRule.host }}
