@@ -51,7 +51,7 @@ spec:
   - hosts:
     {{- if and (not $ingressRule.tls) $.Values.ingress.tls }}
     - {{ $ingressRule.host }}
-    {{- if and (eq (typeof $.Values.ingress.tls) "bool") ($.Values.ingress.tls) }}
+    {{- if and (eq (typeOf $.Values.ingress.tls) "bool") ($.Values.ingress.tls) }}
     {{- if $.Values.ingress.name }}
     secretName: {{ $.Values.ingress.name | quote }}
     {{- else }}
@@ -67,7 +67,7 @@ spec:
     {{- else }}
     {{- if $ingressRule.tls }}
     - {{ $ingressRule.host }}
-    {{- if and (eq (typeof $ingressRule.tls) "bool") ($ingressRule.tls) }}
+    {{- if and (eq (typeOf $ingressRule.tls) "bool") ($ingressRule.tls) }}
     {{- if $.Values.ingress.name }}
     secretName: {{ $.Values.ingress.name | quote }}
     {{- else }}
