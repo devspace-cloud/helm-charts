@@ -35,7 +35,11 @@ spec:
           {{- else }}
           serviceName: {{ $.Release.Name | quote }}
           {{- end }}
-          servicePort: {{ $portMap.servicePort }}
+          {{- if $ingressRule.servicePort }}
+          servicePort: {{ $ingressRule.servicePort }}
+          {{- else }}
+          servicePort: {{ (index $.Values.service.ports 0).port }}
+          {{- end }}
         {{- if $ingressRule.path }}
         path: {{ $ingressRule.path | quote }}
         {{- else }}
