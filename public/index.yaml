@@ -1,15 +1,15 @@
 apiVersion: v1
 entries:
   component-chart:
-  - created: 2019-08-14T12:34:36.2591304-07:00
+  - created: 2019-08-14T12:35:36.9618802-07:00
     description: A helm chart for a cloud-native application created based on DevSpace
       Base Chart (https://github.com/devspace-cloud/helm-charts)
-    digest: 0b1e058c414b7aecf8f62e2d051e5a616f4e49f81ad8879a2674b35bad68d6bc
+    digest: 236d603703d134f37453137496dcc201caff6e4c28a04f6a4c4ff7cabff6ef4e
     name: component-chart
     urls:
     - https://charts.devspace.cloud/component-chart-v0.0.3.tgz
     version: v0.0.3
-  - created: 2019-08-14T12:34:36.2591304-07:00
+  - created: 2019-08-14T12:35:36.9618802-07:00
     description: A helm chart for a cloud-native application created based on DevSpace
       Base Chart (https://github.com/devspace-cloud/helm-charts)
     digest: 56f610a465b6af0868fd584c3f94513097fc70da675f662b1b9b51cb6c48a92f
@@ -17,7 +17,7 @@ entries:
     urls:
     - https://charts.devspace.cloud/component-chart-v0.0.2.tgz
     version: v0.0.2
-  - created: 2019-08-14T12:34:36.2581292-07:00
+  - created: 2019-08-14T12:35:36.9608798-07:00
     description: A helm chart for a cloud-native application created based on DevSpace
       Base Chart (https://github.com/devspace-cloud/helm-charts)
     digest: f279c4a479a13bd4e1c9cd514bb25f439fc2504c5fd10de2a54b0c7303b947f6
@@ -25,4 +25,4 @@ entries:
     urls:
     - https://charts.devspace.cloud/component-chart-v0.0.1.tgz
     version: v0.0.1
-generated: 2019-08-14T12:34:36.2571287-07:00
+generated: 2019-08-14T12:35:36.9608798-07:00
