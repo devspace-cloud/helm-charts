@@ -9,7 +9,13 @@ service:
   type: ClusterIP
   labels: {}
   annotations: {}
-  ports: []
+  ports:
+  - port: 3000
+    ingress:
+      hostname: XXXX
+  - port: 3003
+    ingress:
+      hostname: XXXX
   externalIPs: []
 
 labels: {}
@@ -18,7 +24,11 @@ annotations: {}
 ingress:
   labels: {}
   annotations: {}
-  rules: []
+  tls: true
+  rules:
+  - hostname: 
+    port: 
+    tls: true
 
 # Define persistent volumes here
 # Then mount them in containers above
