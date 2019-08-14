@@ -47,6 +47,7 @@ spec:
   {{- end }}
   tls:
   {{- range $ingressRuleIndex, $ingressRule := $.Values.ingress.rules }}
+  {{- or $ingressRule.tls $.Values.ingress.tls }}
   - hosts:
     - {{ $ingressRule.host }}
     {{- if and (not $ingressRule.tls) $.Values.ingress.tls }}
@@ -64,7 +65,8 @@ spec:
     secretName: {{ $.Values.ingress.tls | quote }}
     {{- end }}
     {{- else }}
-    {{- if or (not $ingressRule.tls) (eq $ingressRule.tls "true") }}
+    {{- if $ingressRule.tls }}
+    {{- if eq $ingressRule.tls "true" }}
     {{- if $.Values.ingress.name }}
     secretName: {{ $.Values.ingress.name | quote }}
     {{- else }}
@@ -78,6 +80,8 @@ spec:
     secretName: {{ $ingressRule.tls | quote }}
     {{- end }}
     {{- end }}
+    {{- end }}
+  {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}
