@@ -64,8 +64,7 @@ spec:
     secretName: {{ $.Values.ingress.tls | quote }}
     {{- end }}
     {{- else }}
-    {{- if $ingressRule.tls }}
-    {{- if eq $ingressRule.tls "true" }}
+    {{- if or (not $ingressRule.tls) (eq $ingressRule.tls "true") }}
     {{- if $.Values.ingress.name }}
     secretName: {{ $.Values.ingress.name | quote }}
     {{- else }}
@@ -77,7 +76,6 @@ spec:
     {{- end }}
     {{- else }}
     secretName: {{ $ingressRule.tls | quote }}
-    {{- end }}
     {{- end }}
     {{- end }}
   {{- end }}
