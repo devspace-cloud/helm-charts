@@ -79,5 +79,6 @@ spec:
     secretName: {{ $ingressRule.tls | quote }}
     {{- end }}
     {{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}
