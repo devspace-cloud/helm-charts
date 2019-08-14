@@ -11,8 +11,14 @@ metadata:
   labels:
     "app.kubernetes.io/name": {{ $.Release.Name | quote }}
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    {{- range $labelName, $labelValue := $.Values.service.labels }}
+    {{ $labelName | quote }}: {{ $labelValue | quote }}
+    {{- end }}
   annotations:
     "helm.sh/chart": "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+    {{- range $annotationName, $annotationValue := $.Values.service.annotations }}
+    {{ $annotationName | quote }}: {{ $annotationValue | quote }}
+    {{- end }}
 spec:
   externalIPs:
     {{- range $externalIPIndex, $externalIP := $.Values.service.externalIPs }}
@@ -35,23 +41,35 @@ spec:
   type: {{ $.Values.service.type | default "ClusterIP" | quote }}
 ---
 
-{{- range $portMapIndex, $portMap := $.Values.service.ports }}
-{{- if $portMap.ingress }}
+{{- range $rulesIndex, $rulesUnused := $.Values.ingress.rules }}
+{{- if eq $rulesIndex 0 }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  {{- if $portMap.ingress.name }}
-  name: {{ $portMap.ingress.name | quote }}
+  {{- if $.Values.ingress.name }}
+  name: {{ $.Values.ingress.name | quote }}
   {{- else }}
   {{- if $.Values.service.name }}
-  name: "{{ $.Values.service.name }}-{{ $portMap.port }}"
+  name: "{{ $.Values.service.name }}"
   {{- else }}
-  name: "{{ $.Release.Name }}-{{ $portMap.port }}"
+  name: "{{ $.Release.Name }}"
   {{- end }}
   {{- end }}
+  labels:
+    "app.kubernetes.io/name": {{ $.Release.Name | quote }}
+    "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    {{- range $labelName, $labelValue := $.Values.ingress.labels }}
+    {{ $labelName | quote }}: {{ $labelValue | quote }}
+    {{- end }}
+  annotations:
+    "helm.sh/chart": "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+    {{- range $annotationName, $annotationValue := $.Values.ingress.annotations }}
+    {{ $annotationName | quote }}: {{ $annotationValue | quote }}
+    {{- end }}
 spec:
   rules:
-  - host: {{ $portMap.ingress.host | quote }}
+  {{- range $ingressRuleIndex, $ingressRule := $.Values.ingress.rules }}
+  - host: {{ $ingressRule.host | quote }}
     http:
       paths:
       - backend:
@@ -61,11 +79,45 @@ spec:
           serviceName: {{ $.Release.Name | quote }}
           {{- end }}
           servicePort: {{ $portMap.port }}
-        {{- if $portMap.ingress.path }}
-        path: {{ $portMap.ingress.path | quote }}
+        {{- if $ingressRule.path }}
+        path: {{ $ingressRule.path | quote }}
         {{- else }}
         path: /
         {{- end }}
+  {{- end }}
+  tls:
+  {{- range $ingressRuleIndex, $ingressRule := $.Values.ingress.rules }}
+  - hosts:
+    - {{ $ingressRule.host }}
+    {{- if and (not $ingressRule.tls) $.Values.ingress.tls }}
+    {{- if eq $.Values.ingress.tls "true" }}
+    {{- if $.Values.ingress.name }}
+    secretName: {{ $.Values.ingress.name | quote }}
+    {{- else }}
+    {{- if $.Values.service.name }}
+    secretName: {{ $.Values.service.name | quote }}
+    {{- else }}
+    secretName: {{ $.Release.Name | quote }}
+    {{- end }}
+    {{- end }}
+    {{- else }}
+    secretName: {{ $.Values.ingress.tls | quote }}
+    {{- end }}
+    {{- else }}
+    {{- if eq $ingressRule.tls "true" }}
+    {{- if $.Values.ingress.name }}
+    secretName: {{ $.Values.ingress.name | quote }}
+    {{- else }}
+    {{- if $.Values.service.name }}
+    secretName: {{ $.Values.service.name | quote }}
+    {{- else }}
+    secretName: {{ $.Release.Name | quote }}
+    {{- end }}
+    {{- end }}
+    {{- else }}
+    secretName: {{ $ingressRule.tls | quote }}
+    {{- end }}
+    {{- end }}
 ---
 {{- end }}
 {{- end }}

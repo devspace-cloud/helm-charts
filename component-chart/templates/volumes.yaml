@@ -20,8 +20,18 @@ metadata:
     "app.kubernetes.io/name": "devspace-app"
     "app.kubernetes.io/component": {{ $.Release.Name | quote }}
     "app.kubernetes.io/managed-by": {{ $.Release.Service | quote }}
+    {{- if $volume.labels }}
+    {{- range $labelName, $labelValue := $volume.labels }}
+    {{ $labelName | quote }}: {{ $labelValue | quote }}
+    {{- end }}
+    {{- end }}
   annotations:
     "helm.sh/chart": "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+    {{- if $volume.annotations }}
+    {{- range $annotationName, $annotationValue := $volume.annotations }}
+    {{ $annotationName | quote }}: {{ $annotationValue | quote }}
+    {{- end }}
+    {{- end }}
 spec:
   accessModes:
     - ReadWriteOnce

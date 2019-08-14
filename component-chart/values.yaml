@@ -7,8 +7,18 @@ containers: []
 
 service:
   type: ClusterIP
+  labels: {}
+  annotations: {}
   ports: []
   externalIPs: []
+
+labels: {}
+annotations: {}
+
+ingress:
+  labels: {}
+  annotations: {}
+  rules: []
 
 # Define persistent volumes here
 # Then mount them in containers above
