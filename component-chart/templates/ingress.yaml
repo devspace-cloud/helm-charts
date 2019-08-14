@@ -47,9 +47,9 @@ spec:
   {{- end }}
   tls:
   {{- range $ingressRuleIndex, $ingressRule := $.Values.ingress.rules }}
+  {{- if and (not $ingressRule.tls) $.Values.ingress.tls }}
+  {{- if not (eq (printf "%s" $.Values.ingress.tls) (printf "%t" false)) }}
   - hosts:
-    {{- if and (not $ingressRule.tls) $.Values.ingress.tls }}
-    {{- if not (eq (printf "%s" $.Values.ingress.tls) (printf "%t" false)) }}
     - {{ $ingressRule.host }}
     {{- if eq (printf "%s" $.Values.ingress.tls) (printf "%t" true) }}
     {{- if $.Values.ingress.name }}
@@ -64,10 +64,11 @@ spec:
     {{- else }}
     secretName: {{ $.Values.ingress.tls | quote }}
     {{- end }}
-    {{- end }}
-    {{- else }}
-    {{- if $ingressRule.tls }}
-    {{- if not (eq (printf "%s" $ingressRule.tls) (printf "%t" false)) }}
+  {{- end }}
+  {{- else }}
+  {{- if $ingressRule.tls }}
+  {{- if not (eq (printf "%s" $ingressRule.tls) (printf "%t" false)) }}
+  - hosts:
     - {{ $ingressRule.host }}
     {{- if eq (printf "%s" $ingressRule.tls) (printf "%t" true) }}
     {{- if $.Values.ingress.name }}
@@ -82,9 +83,9 @@ spec:
     {{- else }}
     secretName: "{{ $ingressRule.tls }}"
     {{- end }}
-    {{- end }}
-    {{- end }}
-    {{- end }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}
