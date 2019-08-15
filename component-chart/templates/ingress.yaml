@@ -19,6 +19,7 @@ metadata:
     {{ $labelName | quote }}: {{ $labelValue | quote }}
     {{- end }}
   annotations:
+    "helm.sh/chart": "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
     {{- range $annotationName, $annotationValue := $.Values.ingress.annotations }}
     {{ $annotationName | quote }}: {{ $annotationValue | quote }}
     {{- end }}
