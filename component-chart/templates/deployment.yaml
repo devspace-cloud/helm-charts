@@ -98,6 +98,12 @@ spec:
           {{- else }}
           name: "container-{{ $containerIndex }}"
           {{- end }}
+          {{- if $container.stdin }}
+          stdin: {{ $container.stdin }}
+          {{- end }}
+          {{- if $container.tty }}
+          tty: {{ $container.tty }}
+          {{- end }}
           command:
             {{- range $commandIndex, $command := $container.command }}
             - {{ $command | quote }}
