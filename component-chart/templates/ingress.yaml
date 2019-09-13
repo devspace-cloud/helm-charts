@@ -6,10 +6,14 @@ metadata:
   {{- if $.Values.ingress.name }}
   name: {{ $.Values.ingress.name | quote }}
   {{- else }}
-  {{- if $.Values.service.name }}
-  name: "{{ $.Values.service.name }}"
+  {{- if $.Values.ingress.serviceName }}
+  name: {{ $.Values.ingress.serviceName | quote }}
   {{- else }}
-  name: "{{ $.Release.Name }}"
+  {{- if $.Values.service.name }}
+  name: {{ $.Values.service.name | quote }}
+  {{- else }}
+  name: {{ $.Release.Name | quote }}
+  {{- end }}
   {{- end }}
   {{- end }}
   labels:
@@ -30,10 +34,14 @@ spec:
     http:
       paths:
       - backend:
+          {{- if $.Values.ingress.serviceName }}
+          serviceName: {{ $.Values.ingress.serviceName | quote }}
+          {{- else }}
           {{- if $.Values.service.name }}
           serviceName: {{ $.Values.service.name | quote }}
           {{- else }}
           serviceName: {{ $.Release.Name | quote }}
+          {{- end }}
           {{- end }}
           {{- if $ingressRule.servicePort }}
           servicePort: {{ $ingressRule.servicePort }}
