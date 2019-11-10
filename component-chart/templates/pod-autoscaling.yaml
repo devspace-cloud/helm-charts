@@ -21,18 +21,22 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ $.Release.Name.name | quote }}
+    name: {{ $.Release.Name | quote }}
   minReplicas: {{ $.Values.replicas }}
   maxReplicas: {{ $.Values.autoScaling.horizontal.maxReplicas }}
   metrics:
+  {{- if $.Values.autoScaling.horizontal.averageCPU }}
   - type: Resource
     resource:
       name: cpu
       targetAverageUtilization: {{ $.Values.autoScaling.horizontal.averageCPU }}
+  {{- end }}
+  {{- if $.Values.autoScaling.horizontal.averageMemory }}
   - type: Resource
     resource:
       name: memory
       targetAverageValue: {{ $.Values.autoScaling.horizontal.averageMemory | quote }}
+  {{- end }}
 ---
 {{- end }}
 {{- end }}
