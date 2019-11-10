@@ -29,13 +29,25 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: {{ $.Values.autoScaling.horizontal.averageCPU }}
+      targetAverageValue: {{ $.Values.autoScaling.horizontal.averageCPU }}
+  {{- end }}
+  {{- if $.Values.autoScaling.horizontal.averageRelativeCPU }}
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ $.Values.autoScaling.horizontal.averageRelativeCPU }}
   {{- end }}
   {{- if $.Values.autoScaling.horizontal.averageMemory }}
   - type: Resource
     resource:
       name: memory
       targetAverageValue: {{ $.Values.autoScaling.horizontal.averageMemory | quote }}
+  {{- end }}
+  {{- if $.Values.autoScaling.horizontal.averageRelativeMemory }}
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: {{ $.Values.autoScaling.horizontal.averageRelativeMemory | quote }}
   {{- end }}
 ---
 {{- end }}
